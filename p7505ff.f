@@ -36,7 +36,7 @@ c
       un=1.0d0                                                          p7500660
       z=0.0d0                                                           p7500670
       zz=1.0d-08                                                        p7500680
-	open(unit=7,status='new',file='ber907505_DEV')
+	open(unit=7,status='new',file='ber907505_1')
 c                                                                       p7500690
 c constantes du probleme                                                p7500700
 c ala apoa constante                                                    p7500710
@@ -110,9 +110,9 @@ c   constantes utlisees dans ber90
 c
 c  constantes pour le Devonien
 
-      bea=23.4458d0                                                     p7500840
-      prea=58.577730                                                    p7500860
-      prega=-2513.65d0                                                  p7500880
+!      bea=23.4458d0                                                     p7500840
+!      prea=58.577730                                                    p7500860
+!      prega=-2513.65d0                                                  p7500880
 ***************************************************************************
 c   kz  5th term for incl on invar plane                                p7500760
 c    ne  3 equations a resoudre                                         p7500770
@@ -338,7 +338,7 @@ c     if(dabs(baf).ge.0.1d0)goto 54
 c     if(dabs(paf).ge.1.0d0)goto 54
 c     goto 52
 54    write(7,7002) i,baf,paf,dpaf,s,d11,ipr                            p7502630
- 7002 format(i4,f15.7,f15.7,f13.7,f13.6,f13.5,'bp',i5)                  p7502640
+ 7002 format(i4,f15.7,f15.7,f13.7,f13.6,f13.5,' bp',i5)                  p7502640
    52 continue                                                          p7502650
       icc=ic+1                                                          p7502660
       do 53 i=icc,id                                                    p7502670
@@ -350,7 +350,7 @@ c     if(dabs(baf).ge.0.1d0)goto 56
 c     if(dabs(paf).ge.1.0d0)goto 56
 c     goto 53
    56 write(7,7003) i,paf,dpaf,s,d11,ipr                                p7502720
- 7003 format(i4,15x,f15.7,f13.7,f13.6,f13.5,'bp',i5)                    p7502730
+ 7003 format(i4,15x,f15.7,f13.7,f13.6,f13.5,' bp',i5)                    p7502730
    53 continue                                                          p7502740
 c   
 c	stop                                                            p7502750
