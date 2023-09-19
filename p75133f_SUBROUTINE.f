@@ -1,3 +1,11 @@
+      subroutine berger75133f(
+     +ia, ib, ic,id, ha, prma, pprma, tseta,
+     +aa, a, c,
+     +bb, b, d,
+     +baf, paf, dpaf, s, d11 ,
+     +baff, paff, ss, d111)
+
+
       implicit double precision(a-h,p-z)                                p7500030
       dimension aa(80),a(80),c(80),cyc1(80),bb(80),b(80),d(80),cyc2(80),p7500040
      *baf(9640),paf(9640),s(9640),d11(9640),il(5),ih(5)                 p7500050
@@ -11,18 +19,21 @@ c                                                                       p7500120
 c   avec classement par ordre decroissant                               p7500130
 c   papier pour inqua 1977                                              p7500140
 c                                                                       p7500150
-      open(unit=5,file='ber78_1',status='old')
-      open(unit=7,file='ber78_5.dat',status='unknown')
+!      open(unit=5,file='ber907505_1.dat',status='old')
+!      open(unit=7,file='ber90_5.dat',status='new')
+ 
+      intent (in) :: ia, ib, ic,id, ha, prma, pprma, tseta
+      intent (in) :: aa, a, c
+      intent (in) :: bb, b, d
+      intent (inout) :: baf, paf, dpaf, s, d11 
+      intent (out) :: baff, paff, ss, d111
+
       z=1.0d-08                                                         p7500160
       pi=dacos(-1.0d0)                                                  p7500170
       pir=pi/180.0d0                                                    p7500180
       pirr=pir/3600.0d0                                                 p7500190
       atp=1.0d0                                                         p7500200
       atb=0.1d0                                                         p7500210
-      read(5,5004) ia,ib,ic,id,ha,prma,pprma,tseta                      p7500220
- 5004 format(4i5,4f15.8)                                                p7500230
-      write(7,5005) ia,ib,ic,id,ha,prma,pprma,tseta                     p7500240
- 5005 format(4i5,4f15.8)                                                p7500250
       il(1)=1                                                           p7500260
       ih(1)=ib                                                          p7500270
       il(2)=ih(1)+1                                                     p7500280
@@ -34,7 +45,6 @@ c                                                                       p7500150
       il(5)=ih(4)+1                                                     p7500340
       ih(5)=id                                                          p7500350
       do 50 i=1,ia                                                      p7500360
-      read(5,5000) ii,aa(i),a(i),c(i)                                   p7500370
  5000 format(i4,f20.8,f20.7,f20.6)                                      p7500380
       aza=a(i)*pirr                                                     p7500390
       aza=dabs(aza)                                                     p7500400
@@ -44,8 +54,6 @@ c                                                                       p7500150
    40 cyc1(i)=0.0d0                                                     p7500440
    50 continue                                                          p7500450
       do 51 i=1,ib                                                      p7500460
-      read(5,5001) ii,bb(i),b(i),d(i)                                   p7500470
- 5001 format(i4,3f20.10)                                                p7500480
       aza=b(i)*pirr                                                     p7500490
       aza=dabs(aza)                                                     p7500500
       if (aza.le.z) go to 41                                            p7500510
@@ -55,55 +63,9 @@ c                                                                       p7500150
    51 continue                                                          p7500550
       call claser(aa,a,c,cyc1,ia)                                       p7500560
       call claser(bb,b,d,cyc2,ib)                                       p7500570
-      write(6,6000)                                                     p7500580
- 6000 format(///,1x,'table 1  parametres in series expansions of fundamep7500590
-     *ntal ecliptical elements',/)                                      p7500600
-      write(6,6010)                                                     p7500610
-      write(6,6001)                                                     p7500620
-      write(6,6010)                                                     p7500630
-      write(6,6002)                                                     p7500640
- 6001 format(6x,4x,'eccentricity and longitude of perihelion',3x,8x,' inp7500650
-     *clination and longitude of node',/)                               p7500660
- 6002 format(3x,'i',3x,'amplitude',2x,' mean  rate ',5x,'phase',7x,'perip7500670
-     *od',1x,5x,' amplitude ',' mean  rate ',2x,3x,'phase',5x,2x,'periodp7500680
-     *',/)                                                              p7500690
-      write(6,6202)                                                     p7500700
- 6202 format(20x,'(''''/year)',4x,'(degree)',6x,'(years)',18x,'(''''/yeap7500710
-     *r)',4x,'(degree)',6x,'(years)',/)                                 p7500720
-      do 52 i=1,ib                                                      p7500730
-      write(6,6003) i,aa(i),a(i),c(i),cyc1(i),bb(i),b(i),d(i),cyc2(i)   p7500740
- 6003 format(1x,i3,2x,f11.8,2x,f10.6,2x,f11.6,2x,f10.0,4x,f11.8,2x,f10.6p7500750
-     *,2x,f11.6,2x,f10.0)                                               p7500760
-      if (i.eq.8) write(6,6010)                                         p7500770
-   52 continue                                                          p7500780
-      icc=ib+1                                                          p7500790
-      do 53 i=icc,ia                                                    p7500800
-      write(6,6004) i,aa(i),a(i),c(i),cyc1(i)                           p7500810
- 6004 format(1x,i3,2x,f11.8,2x,f10.6,2x,f11.6,2x,f10.0)                 p7500820
-   53 continue                                                          p7500830
-      do 70 i=1,ia                                                      p7500840
-      write(7,5001) i,aa(i),a(i),c(i)                                   p7500850
-70    continue                                                          p7500860
-      do 71 i=1,ib                                                      p7500870
-      write(7,5001) i,bb(i),b(i),d(i)                                   p7500880
-  71  continue                                                          p7500890
 c                                                                       p7500900
 c   obliquity                                                           p7500910
 c                                                                       p7500920
-      do 54 i=1,ic                                                      p7500930
-      read(5,5002) ii,baf(i),paf(i),dpaf,s(i),d11(i)                    p7500940
- 5002 format(i4,f15.7,f15.7,f13.7,f13.6,f12.4)                          p7500950
-   54 continue                                                          p7500960
-      icc=ic+1                                                          p7500970
-      do 55 i=icc,id                                                    p7500980
-      read(5,5003) ii,paf(i),dpaf,s(i),d11(i)                           p7500990
- 5003 format(i4,15x,f15.7,f13.7,f13.6,f12.4)                            p7501000
-   55 continue                                                          p7501010
-c                                                                       p7501020
-c   mean motion et phase differents                                     p7501030
-c                                                                       p7501040
-      write(6,6100)                                                     p7501050
- 6100 format(1h1,///,1x,'test valeurs differentes mean motions',//)     p7501060
 c                                                                       p7501070
 c   mean motion positif phase comprise entre 0 et 360 degres            p7501080
 c                                                                       p7501090
@@ -136,8 +98,6 @@ c                                                                       p7501330
       if (ad.ne.d111(j)) go to 202                                      p7501360
       baff(j)=baff(j)+baf(i)                                            p7501370
       paff(j)=paff(j)+paf(i)                                            p7501380
-      write(6,6101) j,iz,baff(j),paff(j),ss(j),d111(j)                  p7501390
-      write(6,6101) iz,i,baf(i),paf(i),s(i),d11(i)                      p7501400
  6101 format(1x,i4,2x,i4,4x,f15.7,4x,f15.7,4x,f13.6,4x,f13.5)           p7501410
       go to 201                                                         p7501420
   202 continue                                                          p7501430

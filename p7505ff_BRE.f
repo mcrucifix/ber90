@@ -1,4 +1,4 @@
-      program berger
+      program ierger
       implicit double precision (a-h,p-z)                               p7500030
       dimension aa(80),a(80),c(80),
      *bbt(80),bt(80),dt(80),                                            p7500040
@@ -36,7 +36,7 @@ c
       un=1.0d0                                                          p7500660
       z=0.0d0                                                           p7500670
       zz=1.0d-08                                                        p7500680
-	open(unit=7,status='unknown',file='ber907505_1')
+	open(unit=7,status='unknown',file='ber78_1')
 c                                                                       p7500690
 c constantes du probleme                                                p7500700
 c ala apoa constante                                                    p7500710
@@ -72,21 +72,21 @@ c
 ***************************************************************************
 ***************************************************************************
 *c pour une solution laskar
- 	open(unit=10,file='ioepl.data',status='old')
+ 	open(unit=10,file='bre78.dat',status='old')
         read(10,*)
  	read(10,1001)ia
  	do 1 i=1,ia
- 	 read(10,1000)k, a(i),ampl,c(i)
- 	 aa(i)=ampl*1.0d-08
+ 	 read(10,1000)k, ampl, a(i),c(i)
+ 	 aa(i)=ampl
  1	continue
         read(10,*)
  	read(10,1001)ibt
  	do 2 i=1,ibt
- 	 read(10,1000)k, bt(i),ampl,dt(i)
- 	 bbt(i)=ampl*1.0d-08
+                   write(6,'(i4)') i
+ 	 read(10,1000)k, bbt(i),bt(i),dt(i)
  2	continue
          kz=1                                                           p7500780
- 1000	format(i4,f15.6,f15.0,f15.6)
+ 1000	format(i4,f20.10,f20.10,f20.10)
  1001	format(i4)
 c
 c  constantes 1950.0 par rapport a 2000.0 (Andoyer)
@@ -350,8 +350,6 @@ c                                                                       p7502450
       write(7,7000) i,aa(i),a(i),c(i),ipr                               p7502500
  7000 format(i4,f20.8,f20.7,f20.6,10x,'a',i5)                           p7502510
    50 continue                                                          p7502520
-      write(7,*) 'IIICCCIII'
-      write(7,*) ib
       do 51 i=1,ib                                                      p7502530
       write(7,7001) i,bb(i),b(i),d(i),ipr                               p7502540
  7001 format(i4,3f20.10,10x,'b',i5)                                     p7502550

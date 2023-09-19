@@ -1,0 +1,52 @@
+En analysant p7505ff.f on remarque qu'il sort
+
+      -- sortie standard (que nous n'utilsons pas)
+
+      write(6,6004) ha,hha,prma,tseta                                   p7501940
+      write(6,6005) ca1,ca4,ca7,ca2,ca5,ca8,ca3,ca6,ca9                 p7501960
+      write(6,6006) cb1,cb2,cb3                                         p7501980
+
+
+      write(6,6958) ji,qaa(j),qa(j),qc(j),aper                          p7504350
+
+
+	    open(unit=7,status='new',file='ber907505_1')
+
+
+      write(7,6900) ha,hha,prma,pprma,tseta                             p7502390
+      write(7,7004) ia,ib,ic,id,ha,prma,pprma,tseta,ipr                 p7502470
+
+
+      write(7,7000) i,aa(i),a(i),c(i),ipr                               p7502500
+
+      qaa = aa
+      qa = a + prma
+      qc = c + tseta
+      
+
+      write(7,6958) ji,qaa(j),qa(j),qc(j),aper                          p7504360
+
+54    write(7,7002) i,baf,paf,dpaf,s,d11,ipr                            p7502630
+
+      pir = pi/180
+      pirr = pir/3600
+
+      sortie: bf/pirr, pf/pirr, dpf/pirr, sa/pirr, ddr/pir
+
+
+      Donc: sorties essentielles: 
+
+     
+      prma  [scalaire, input]
+      tseta [scalaire, input]
+
+      aa [vecteur]
+      a  [vecteur]
+      c  [vecteur]
+
+      bf
+      pf
+      dpf
+      sa
+      ddr
+      
