@@ -108,6 +108,13 @@ c   constantes fournies dans article ber90 eq. 29
       prea=50.273147d0                                                  p7500860
       prega=-0.69824d0*3600.d0
 
+
+c   constantes fournies dans article ber90 eq. 28 pour BER78
+
+      bea=23.4458d0                                                     p7500840
+      prea=50.2686d0                                                    p7500860
+      prega=1.3960*3600.d0
+
 c    constantes utilisees dans palinsol. 
 
 c    psibar_ber90<- 50.41726176/60./60. * pi/180
@@ -142,6 +149,7 @@ c    ne  3 equations a resoudre                                         p7500770
       ne=3                                                              p7500790
       ks=0
       ! precessional constant of newcomb
+c     telle que renseignee dans ber90
       ala=54.9066d0                                                     p7500800
 !      ala=54.8950d0                                                     p7500800
       al=ala*pirr                                                       p7500810
@@ -183,7 +191,14 @@ c calcul developpement sin(i) from sin(i/2)                             p7501100
 c ibs=nbre suppose de termes                                            p7501110
 c ib=nbre termes retenus                                                p7501120
       ibs=500                                                           p7501130
-      call trani(ibt,bbt,bt,dt,ibs,bb,b,d,ib)                           p7501140
+!      call trani(ibt,bbt,bt,dt,ibs,bb,b,d,ib)                           p7501140
+!     bre78 founit directement le systeme iomega
+      ib = 15;
+      do j = 1,15
+        bb(j) = bbt(j)
+        b(j) = bt(j)
+        d(j) = dt(j)
+      enddo
 c                                                                       p7501150
 c impressions des donnees transformees et transf. en radians            p7501160
 c data berger sin(i)   bb b d                                           p7501170
