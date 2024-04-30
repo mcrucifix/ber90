@@ -1,0 +1,360 @@
+Last login: Tue Jul 10 15:53:16 on ttys003
+[hinnov-macbook17:~] hinnov% cd Desktop/DIGITAL-ORRERY
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% la
+la: Command not found.
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% ls
+CLIVAR0N.ASC		PROGRAM INTEG.doc	integall
+CLIVAR0P.ASC		Parallelizing.notes	integall.f
+Laskar1986.pdf		climavar.f		integsub.f
+Laskar93.README		climavar.par		mac2unix
+Makefile		insola.f		prepa.f
+ORBELN.ASC		insola.par		prepa.o
+ORBELP.ASC		insolsub.f		prepa.par
+PREC0N.ASC		integ.f			prepinsol.f
+PREC0P.ASC		integ.par		prepinsol.par
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% pico prepa.f
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% ./mac2unix prepa.f
+Converting Mac linebreak characters to Unix
+  Processing prepa.f
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% gfortran prepa.f -o prepa
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% pico integ.par
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% ./mac2unix integ.par
+Converting Mac linebreak characters to Unix
+  Processing integ.par
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% pico prepa.par
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% ./mac2unix prepa.par
+Converting Mac linebreak characters to Unix
+  Processing prepa.par
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% ./prepa
+  Solution La90-La93 for the Earth 
+
+  La93.prepa  version 0.8
+  preparation step 
+  (c) ASD/BdL (1993) 
+
+  ASCII file for positive time           :ORBELP.ASC                                        
+  ASCII file for negative time           :ORBELN.ASC                                        
+  Binary file for elliptical elements    :ELL.BIN                                           
+  Binary file for derivatives of ell. el :DER.BIN                                           
+  starting time (Myr)                    :  -20.0000000000000     
+  ending   time (Myr)                    :   10.0000000000000     
+At line 281 of file prepa.f
+Fortran runtime error: End of file
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% pico prepa.par
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% ls
+CLIVAR0N.ASC		PROGRAM INTEG.doc	integall.f
+CLIVAR0P.ASC		Parallelizing.notes	integsub.f
+ELL.BIN			climavar.f		mac2unix
+Laskar1986.pdf		climavar.par		prepa
+Laskar93.README		insola.f		prepa.f
+Makefile		insola.par		prepa.o
+ORBELN.ASC		insolsub.f		prepa.par
+ORBELP.ASC		integ.f			prepinsol.f
+PREC0N.ASC		integ.par		prepinsol.par
+PREC0P.ASC		integall
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% ./mac2unix ELL.BIN
+Converting Mac linebreak characters to Unix
+  Processing ELL.BIN
+Use of uninitialized value in substitution (s///) at ./mac2unix line 35.
+Use of uninitialized value in print at ./mac2unix line 38.
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% ./prepa
+  Solution La90-La93 for the Earth 
+
+  La93.prepa  version 0.8
+  preparation step 
+  (c) ASD/BdL (1993) 
+
+  ASCII file for positive time           :ORBELP.ASC                                        
+  ASCII file for negative time           :ORBELN.ASC                                        
+  Binary file for elliptical elements    :ELL.BIN                                           
+  Binary file for derivatives of ell. el :DER.BIN                                           
+  starting time (Myr)                    :  -20.0000000000000     
+  ending   time (Myr)                    :   10.0000000000000     
+At line 281 of file prepa.f
+Fortran runtime error: End of file
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% ./mac2unix ORBELN.ASC
+Converting Mac linebreak characters to Unix
+  Processing ORBELN.ASC
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% ./mac2unix ORBELP.ASC
+Converting Mac linebreak characters to Unix
+  Processing ORBELP.ASC
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% ./mac2unix PREC0N.ASC
+Converting Mac linebreak characters to Unix
+  Processing PREC0N.ASC
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% ./mac2unix PREC0P.ASC
+Converting Mac linebreak characters to Unix
+  Processing PREC0P.ASC
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% ./prepa
+  Solution La90-La93 for the Earth 
+
+  La93.prepa  version 0.8
+  preparation step 
+  (c) ASD/BdL (1993) 
+
+  ASCII file for positive time           :ORBELP.ASC                                        
+  ASCII file for negative time           :ORBELN.ASC                                        
+  Binary file for elliptical elements    :ELL.BIN                                           
+  Binary file for derivatives of ell. el :DER.BIN                                           
+  starting time (Myr)                    :  -20.0000000000000     
+  ending   time (Myr)                    :   10.0000000000000     
+ The file  ELL.BIN                                            is created.
+ The file DER.BIN                                            is created.
+  The preparation step is completed normally
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% ./integall
+  Solution La90-La93 for the Earth 
+
+  La93.integ  version 0.82
+  integration step 
+  (c) ASD/BdL (1993) 
+
+  stepsize (yrs) default : 200           :   200.000000000000     
+  print every            5   step
+  starting time (Myr)                    :  -20.0000000000000     
+  ending   time (Myr)                    :   10.0000000000000     
+
+  save results for positive time         :oui
+  save results for negative time         :oui
+  ASCII file for positive time           :PRECP.ASC                                         
+  ASCII file for negative time           :PRECN.ASC                                         
+  status of created files                :unknown             
+
+
+ Relative change of dynamical ellipticity
+ ENTER gamma/gamma_0  (default 1) 
+1 
+ FGAM =    1.00000000000000     
+
+ Relative tidal effet
+  0 : no tidal effect 
+  1 :  -4.6 D-18 seconds**-1
+ ENTER cmar  (default 0) 
+1
+ CMAR =    1.00000000000000     
+
+
+ Informations for internal check
+
+ VITESSE ANGULAIRE DE LA TERRE   474659981.597137     
+ PRECESSION EN ASCENSION DROITE   5038.78333303739     
+ ELD  3.280051141686707E-003
+ RFL0   34.4299853104403     
+ RFL1 -2.689618769703788E-003
+ RFL3  3.345947259932938E-004
+ RFS   15.9794030435149     
+ RFL0+RFL1+RFL3+RFS   50.4070333299114     
+ CP1,CP2,CP3,CP4  EN SECONDES PAR AN 
+   37.5266032262158      -1.565173168350902E-003  8.260292831613920E-005   34.8186175959206     
+ AK1 -2.702324357790680E-010
+ AK2 -1.451649600000000E-010
+
+ Relative change of dynamical ellipticity
+ ENTER gamma/gamma_0  (default 1) 
+1
+ FGAM =    1.00000000000000     
+
+ Relative tidal effet
+  0 : no tidal effect 
+  1 :  -4.6 D-18 seconds**-1
+ ENTER cmar  (default 0) 
+1
+ CMAR =    1.00000000000000     
+
+
+ Informations for internal check
+
+ VITESSE ANGULAIRE DE LA TERRE   474659981.597137     
+ PRECESSION EN ASCENSION DROITE   5038.78333303739     
+ ELD  3.280051141686707E-003
+ RFL0   34.4299853104403     
+ RFL1 -2.689618769703788E-003
+ RFL3  3.345947259932938E-004
+ RFS   15.9794030435149     
+ RFL0+RFL1+RFL3+RFS   50.4070333299114     
+ CP1,CP2,CP3,CP4  EN SECONDES PAR AN 
+   37.5266032262158      -1.565173168350902E-003  8.260292831613920E-005   34.8186175959206     
+ AK1 -2.702324357790680E-010
+ AK2 -1.451649600000000E-010
+
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% pico LA2010A.ASC
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% ls
+CLIVAR0N.ASC		Laskar93.README		PRECN.ASC		insola.f		integall.f		prepa.par
+CLIVAR0P.ASC		Makefile		PRECP.ASC		insola.par		integsub.f		prepinsol.f
+DER.BIN			ORBELN.ASC		PROGRAM INTEG.doc	insolsub.f		mac2unix		prepinsol.par
+ELL.BIN			ORBELP.ASC		Parallelizing.notes	integ.f			prepa
+LA2010A.ASC.txt		PREC0N.ASC		climavar.f		integ.par		prepa.f
+Laskar1986.pdf		PREC0P.ASC		climavar.par		integall		prepa.o
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% LA2010A.ASC.txt
+LA2010A.ASC.txt: Command not found.
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% pico LA2010A.ASC.txt
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% ls
+CLIVAR0N.ASC		Laskar1986.pdf		PREC0P.ASC		climavar.par		integall		prepa.o
+CLIVAR0P.ASC		Laskar93.README		PRECN.ASC		insola.f		integall.f		prepa.par
+DER.BIN			Makefile		PRECP.ASC		insola.par		integsub.f		prepinsol.f
+ELL.BIN			ORBELN.ASC		PROGRAM INTEG.doc	insolsub.f		mac2unix		prepinsol.par
+LA2010A.ASC		ORBELP.ASC		Parallelizing.notes	integ.f			prepa
+LA2010A.ASC.txt		PREC0N.ASC		climavar.f		integ.par		prepa.f
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% ./mac2unix LA2010A.ASC
+Converting Mac linebreak characters to Unix
+  Processing LA2010A.ASC
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% pico prepa.par
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% pico integ.par
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% ./prepa
+  Solution La90-La93 for the Earth 
+
+  La93.prepa  version 0.8
+  preparation step 
+  (c) ASD/BdL (1993) 
+
+  ASCII file for positive time           :ORBELP.ASC                                        
+  ASCII file for negative time           :LA2010A.ASC                                       
+  Binary file for elliptical elements    :ELL.BIN                                           
+  Binary file for derivatives of ell. el :DER.BIN                                           
+  starting time (Myr)                    :  -20.0000000000000     
+  ending   time (Myr)                    :   0.00000000000000     
+ The file  ELL.BIN                                            is created.
+ The file DER.BIN                                            is created.
+  The preparation step is completed normally
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% ./integall
+  Solution La90-La93 for the Earth 
+
+  La93.integ  version 0.82
+  integration step 
+  (c) ASD/BdL (1993) 
+
+  stepsize (yrs) default : 200           :   200.000000000000     
+  print every            5   step
+  starting time (Myr)                    :  -20.0000000000000     
+  ending   time (Myr)                    :   0.00000000000000     
+
+  save results for positive time         :oui
+  save results for negative time         :oui
+  ASCII file for positive time           :PRECP.ASC                                         
+  ASCII file for negative time           :PRECN.ASC                                         
+  status of created files                :unknown             
+
+
+ Relative change of dynamical ellipticity
+ ENTER gamma/gamma_0  (default 1) 
+1
+ FGAM =    1.00000000000000     
+
+ Relative tidal effet
+  0 : no tidal effect 
+  1 :  -4.6 D-18 seconds**-1
+ ENTER cmar  (default 0) 
+1
+ CMAR =    1.00000000000000     
+
+
+ Informations for internal check
+
+ VITESSE ANGULAIRE DE LA TERRE   474659981.597137     
+ PRECESSION EN ASCENSION DROITE   5038.78333303739     
+ ELD  3.280051141686707E-003
+ RFL0   34.4299853104403     
+ RFL1 -2.689618769703788E-003
+ RFL3  3.345947259932938E-004
+ RFS   15.9794030435149     
+ RFL0+RFL1+RFL3+RFS   50.4070333299114     
+ CP1,CP2,CP3,CP4  EN SECONDES PAR AN 
+   37.5266032262158      -1.565173168350902E-003  8.260292831613920E-005   34.8186175959206     
+ AK1 -2.702324357790680E-010
+ AK2 -1.451649600000000E-010
+
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% pico prepa.par
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% pico integ.par
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% ./prepa
+  Solution La90-La93 for the Earth 
+
+  La93.prepa  version 0.8
+  preparation step 
+  (c) ASD/BdL (1993) 
+
+  ASCII file for positive time           :ORBELP.ASC                                        
+  ASCII file for negative time           :LA2010A.ASC                                       
+  Binary file for elliptical elements    :ELL.BIN                                           
+  Binary file for derivatives of ell. el :DER.BIN                                           
+  starting time (Myr)                    :  -250.000000000000     
+  ending   time (Myr)                    :   0.00000000000000     
+At line 287 of file prepa.f
+Fortran runtime error: End of file
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% pico prepa.par
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% pico integ.par
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% ./prepa
+  Solution La90-La93 for the Earth 
+
+  La93.prepa  version 0.8
+  preparation step 
+  (c) ASD/BdL (1993) 
+
+  ASCII file for positive time           :ORBELP.ASC                                        
+  ASCII file for negative time           :LA2010A.ASC                                       
+  Binary file for elliptical elements    :ELL.BIN                                           
+  Binary file for derivatives of ell. el :DER.BIN                                           
+  starting time (Myr)                    :  -200.000000000000     
+  ending   time (Myr)                    :   0.00000000000000     
+ The file  ELL.BIN                                            is created.
+ The file DER.BIN                                            is created.
+  The preparation step is completed normally
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% ./integall
+  Solution La90-La93 for the Earth 
+
+  La93.integ  version 0.82
+  integration step 
+  (c) ASD/BdL (1993) 
+
+  stepsize (yrs) default : 200           :   200.000000000000     
+  print every            5   step
+  starting time (Myr)                    :  -200.000000000000     
+  ending   time (Myr)                    :   0.00000000000000     
+
+  save results for positive time         :oui
+  save results for negative time         :oui
+  ASCII file for positive time           :PRECP.ASC                                         
+  ASCII file for negative time           :PRECN.ASC                                         
+  status of created files                :unknown             
+
+
+ Relative change of dynamical ellipticity
+ ENTER gamma/gamma_0  (default 1) 
+1
+ FGAM =    1.00000000000000     
+
+ Relative tidal effet
+  0 : no tidal effect 
+  1 :  -4.6 D-18 seconds**-1
+ ENTER cmar  (default 0) 
+1
+ CMAR =    1.00000000000000     
+
+
+ Informations for internal check
+
+ VITESSE ANGULAIRE DE LA TERRE   474659981.597137     
+ PRECESSION EN ASCENSION DROITE   5038.78333303739     
+ ELD  3.280051141686707E-003
+ RFL0   34.4299853104403     
+ RFL1 -2.689618769703788E-003
+ RFL3  3.345947259932938E-004
+ RFS   15.9794030435149     
+ RFL0+RFL1+RFL3+RFS   50.4070333299114     
+ CP1,CP2,CP3,CP4  EN SECONDES PAR AN 
+   37.5266032262158      -1.565173168350902E-003  8.260292831613920E-005   34.8186175959206     
+ AK1 -2.702324357790680E-010
+ AK2 -1.451649600000000E-010
+
+[hinnov-macbook17:~/Desktop/DIGITAL-ORRERY] hinnov% 
