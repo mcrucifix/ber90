@@ -1,0 +1,67 @@
+---
+title: "Eccentricity nodes"
+output: html_document
+date: "2024-06-20"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Some elemntary considerations
+
+Before we consider elementary signal we reproduce some common observations. Take excentricity, filter around 100 ka and generate complex signal (Morlet wavel does it all at once) and compare with the straight-filtered 400ka of the signal. 
+
+```{r}
+require(palinsol)
+require(gtseries)
+
+times <- seq(-8192,0,1)*1000;
+ecc <- sapply(times, ber90)['ecc',]
+
+ecc <- ts(ecc, start=-8192,  deltat=1)
+plot(ecc)
+```
+We note the cusp points when eccentricity is close to zero. Keep that in mind. Now the filtering and reconstruction
+
+```{r}
+M <- cwt_morlet(ecc)
+ecc_filtered <- reconstruct_morlet(M, c(60,140))
+plot(Re(ecc_filtered))
+lines(Im(ecc_filtered), col='red')
+lines(Mod(ecc_filtered), col='violet', lwd=2)
+```
+
+```{r}
+M_100 <- cwt_morlet(Mod(ecc_filtered))
+ecc_M_100_filtered <- reconstruct_morlet(M_100, c(300,480))
+R_ecc_M_100_filtered <- Re(ecc_M_100_filtered)
+ecc_400_filtered <- reconstruct_morlet(M, c(300,480))
+R_ecc_400_filtered <- Re(ecc_400_filtered)
+
+plot(R_ecc_M_100_filtered)
+lines(R_ecc_400_filtered / 10, col='red')
+lines(Mod(ecc_filtered)/10, col='blue')
+```
+I am a bit puzzled by what I see. Let's look again at the Morlet 2-D diagram
+
+```{r}
+plot(M)
+abline(h=c(60,140,300,480,2000,3000), lty=2)
+```
+```{r}
+# extract the 2.4 component, then takes the sum and compare with full signal
+
+ecc_2400_filtered <- reconstruct_morlet(M, c(2000,3000))
+R_ecc_2400_filtered <- Re(ecc_2400_filtered)
+R_ecc_100_filtered <- Re(ecc_filtered)
+
+plot(ecc - mean(ecc), col='gray', lwd=3)
+ssum <- R_ecc_100_filtered + R_ecc_400_filtered + R_ecc_2400_filtered
+lines(ssum, col='violet')
+lines(R_ecc_400_filtered, col='blue', lwd=3)
+lines(R_ecc_2400_filtered, col='red', lwd=2)
+#lines(R_ecc_2400_filtered*10, lty=2, col='red')
+lines(R_ecc_100_filtered, col='black')
+lines(Mod(ecc_filtered), lty=1, col='black', lwd=2)
+```
