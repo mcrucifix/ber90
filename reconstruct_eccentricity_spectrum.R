@@ -16,6 +16,9 @@ require(gtools)
 EPI <- read.table('epi.dat')
 colnames(EPI) <- c('index','omega','M','phi')
 
+# the file EPI containts the development of "e sin Pi" which is the 
+# only file needed to produce the development of eccentricity
+# This particular file comes from La93.
 
 ## Il y asans doute une erreur dans la page 54 de Berger et Loutre, mais ou ???
 
@@ -28,6 +31,7 @@ EPI$M  <- EPI$M / 1.e8
 EPI$phi <- EPI$phi * 2*pi / 360. 
 
 EPI <- EPI[seq(4),]
+
 
 combine <- function(a,b, om1, om2, ph1, ph2, factor=1) {
   A <- factor * outer(a,b, "*")

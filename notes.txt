@@ -2,7 +2,7 @@ dans bre78 c'est bien iomega, et no niomega/2.
 cf. Bretragnon, les termes sont un peu plus que la motié moindres
 verifier comme exercice  --> ok, fait. 
 
-par contre dans ioepl j'ai l'impression que c'est le syteme i/2omega, et pas i omega
+par contre dans iom j'ai l'impression que c'est le syteme i/2omega, et pas i omega
 Comparaison avec Bre et aussi avec ma propre decomposition de La2010.  
 
 C'est exact, apres verification du code, l'input pour ber90 dans p7505ff.f c'est bien i/2.   -> done
