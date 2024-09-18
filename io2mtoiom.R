@@ -2,7 +2,7 @@ I2OM <- read.table('iom.dat')
 colnames(I2OM) <- c('index','sigmaprime','Nprime','deltaprime')
 
 
-I2OM <- I2OM[-1,]  # suppress constant term 
+# I2OM <- I2OM[-1,]  # suppress constant term 
 
 # need to think more about this. 
 
@@ -13,7 +13,7 @@ I2OM$Nprime  <- I2OM$Nprime / 1.e8
 I2OM$deltaprime <- I2OM$deltaprime * 2*pi / 360. 
 
 
-n <- length(I2OM$Nprime)
+n <- length(I2OM$Nprim)
 
 # I will privilege here transparent writing, even if less efficient. Fortran compiler would be better
 
@@ -26,7 +26,7 @@ TERM1$delta <- I2OM$deltaprime
 
 for (i in seq(n)) TERM1$N[i] <- TERM1$N[i] * ( 2 - I2OM$Nprime[i]^2 - 2 * sum(I2OM$Nprime[-i]^2) ) 
 
-
+# this corresponds to lines p7505810 in his code 
 # line 2 (TERM2)
 
 TERM2 <- list()
@@ -83,6 +83,8 @@ IOM <- list(
             sigma = c(TERM1$sigma, TERM2$sigma, TERM3$sigma), 
             delta = c(TERM1$delta, TERM2$delta, TERM3$delta))
 
+
+# THE IOM LIST IS VALIDATED. AT LEAST IN AMPLITUDES, AND FOR THE FIRST SERIES OF 80 TERMS
 tol <- 1.e-7
 
 nkeep <- which (IOM$N > tol)
@@ -93,24 +95,11 @@ IOM <- list( N = IOM$N[nkeep],
 
 
 
-#################################
-
-### ATTENTION: ARNAQUE !!
-
-### EN FAIT CLAIREMENT DANS IOM C'est les angles pleins, pas les demis
-### QUI SONT FOURNIS. DONC CE QUI EST AU DESSUS EST SUPERFLU
-
-#################################
-
-IOM <- I2OM
-
-# no duplicates. 
-
 #### development of obliquity
 
-epsilonbar = 23.4 * pi / 180
-psibar     = 50.273147 * 2 * pi / 60 / 360 / 60
-zeta       = 0.02793538
+epsilonbar = 23.44579 * pi / 180
+psibar     = 0.0002445400207  + 0.0002443015 - 0.0002445400 
+zeta       = 1.964 * pi / 180. 
 
 # thesis Berger p. 110 = Sharaf Budnikova
 
@@ -124,17 +113,16 @@ cote = 1./tane
 nf <- length(ci)
 
 C1f <- -ci
-C2f <- -0.5 * outer (seq(nf), seq(nf), function(i,k) {
-                       psibar/(fi[i]+fi[k])*((ci[i]^2 + ci[k]^2 - 2) * tane +
+C2fik <- -0.5 * psibar * outer (seq(nf), seq(nf), function(i,k) {
+                       1./(fi[i]+fi[k])*((ci[i]^2 + ci[k]^2 - 2) * tane +
                               (ci[i]+ci[k]) * cote)  })
 
 
 C2fii = -.25 *(ci * (ci^2 - 1) * tane + ci^2 * cote )
 
-C2fprime <- -0.5 * outer (seq(nf), seq(nf), function(i,k) {
-                       psibar/(fi[i]-fi[k])*((ci[i]^2 - ci[k]^2 + 2*ci[k] - 2*ci[i]) * tane +
+C2fikprime <- -0.5 * psibar * outer (seq(nf), seq(nf), function(i,k) {
+                       1./(fi[i]-fi[k])*((ci[i]^2 - ci[k]^2 + 2*ci[k] - 2*ci[i]) * tane +
                               (ci[i]-ci[k]) * cote)  })
-
 
 
 ## ATTENTION CECI DOIT ETRE CORRIGE
@@ -145,19 +133,89 @@ C2fprime <- -0.5 * outer (seq(nf), seq(nf), function(i,k) {
 
 ## pour ca il faut calculer les Di, qui ne sont pas encore calcules !!!! 
 
-### DONC IL Y A ENCORE DU TAF ICI
-### EQUATTIONS 63 DE BERGER
 
-for (i in seq(nf)) { C2fprime[i,i] = 0 }
+#### DEVELOPPEMENT FOR PSI         
 
+# P0 et ell ont ete repris de sa these, sauf que pour ell il y a peut etre un facteur (1-e_0)3/2
+
+P0 = 17.3919
+ell = 54.9066 
+EPI <- read.table('epi.dat')
+colnames(EPI) <- c('index','g','M','beta')
+EPI$g <- EPI$g/(60*60*360)*2*pi
+EPI$M  <- EPI$M / 1.e8
+EPI$beta <- EPI$beta * 2*pi / 360. 
+
+ng <- length(EPI$g)
+
+
+
+
+# precession
+
+
+
+
+D1f <- ci * (cote + (ci - 1) * tane)
+
+D2f <- 0.25 * ci * (ci^2 + ci - 1) + 0.125 * ci^2*(ci-1)^2*(tane^2) + .5 * ci^2 * cote^2 
+
+# ligne p7507950
+
+D2fik <- psibar * outer(fi,fi, function(fi, fk){1/(fi + fk)}) * (
+          0.5 * outer (ci, ci,  function(ci,ck) {ci^2+ck^2+ci+ck-ci*ck-2} )
+         + C2fik * tane
+         - 0.5 *   outer (ci, ci,  function(ci,ck) {ci*(ci-1)+ck*(ck-1)}) * tane^2
+         + outer (ci,ci, '+')*cote^2 )
+
+
+D2fikprime <- psibar * outer(fi,fi, function(fi, fk){1/(fi - fk)}) * (
+          0.5 * outer (ci, ci,  function(ci,ck) { 5 * (ci+ck) - (ci^2+ck^2) - ci*ck - 6} )
+         + C2fikprime * tane
+         + 0.5 *  outer (ci*(ci-1), ci*(ci-1),'+') * tane^2) 
+
+
+
+
+
+
+
+# must define here P0, ell but that's another part of the code. 
+
+Dfseconde = 3 * psibar * P0 / ell * outer(EPI$g, EPI$g,  function(gi,gk) { 1./(gi-gk)})
+
+
+D1 <- D1f - ci
+D2 <- D2f - (ci - 0.5)*cote^2 - 0.5 * (ci^2 - 0.5)
+D2ik <- D2fik - (outer(ci, ci, '+')-1) * cote^2 - 0.5 *(outer(ci^2, ci^2,'+')-1)
+D2ikprime <- D2fikprime - 0.5 * ( outer(ci^2, ci^2,'-')) + outer(ci, ci, '+') 
+
+# psi still need to be coded. eq. 64 of his thesis p. 112
+
+
+# computes the big Ci
+
+# remember that we have the 
+#### C1f
+#### C2f 
+#### C2fii 
+#### C2fprime
+ 
 C1 = C1f + 1
+C2ii = C2fii + 0.5*D1f - 0.25 * cote
+C2ik = C2fik + 0.5 * outer(D1f, D1f, '+') - 0.50 * cote
+C2ikprime = C2fikprime - 0.5 * outer (D1f, D1f, '+') + 0.50 * cote
 
 
 ETERM1 <- list(  N = C1 * IOM$N, sigma = fi, delta = deltaprime ) 
 
-ETERM2 <- list ( N = C2fii * IOM$N^2 , sigma = 2*fi, delta = 2 * deltaprime ) 
+# ETERM1 est validé
 
-ETERM3 <- list ( N = C2f * outer(IOM$N, IOM$N), sigma = outer(fi, fi, '+'), delta = outer(deltaprime, deltaprime, '+'))
+ETERM2 <- list ( N = C2ii * IOM$N^2 , sigma = 2*fi, delta = 2 * deltaprime ) 
+
+# ETREM2 est validé
+
+ETERM3 <- list ( N = C2ik * outer(IOM$N, IOM$N), sigma = outer(fi, fi, '+'), delta = outer(deltaprime, deltaprime, '+'))
 
 for (i in seq(length(IOM$N))) {
   for (k in seq(length(IOM$N))) {
@@ -171,8 +229,11 @@ ETERM3$N <- ETERM3$N[which(!is.na(ETERM3$N))]
 ETERM3$sigma <- ETERM3$sigma[which(!is.na(ETERM3$sigma))]
 ETERM3$delta <- ETERM3$delta[which(!is.na(ETERM3$delta))]
 
+# regarder ETERM4 : il est manifestement faux
+# il y a aussi un mysterieux facteur 0.95, à moins que ce soit
+# un facteur 2 sur omega i / vs i2
 
-ETERM4 <- list ( N = C2fprime * outer(IOM$N, IOM$N), sigma = outer(fi, fi, '-'), delta = outer(deltaprime, deltaprime, '-'))
+ETERM4 <- list ( N = C2ikprime * outer(IOM$N, IOM$N), sigma = outer(fi, fi, '-'), delta = outer(deltaprime, deltaprime, '-'))
 
 for (i in seq(length(IOM$N))) {
   for (k in seq(length(IOM$N))) {
@@ -199,7 +260,7 @@ OBLIQUITY <- list ( N = c(ETERM1$N, ETERM2$N, ETERM3$N, ETERM4$N),
 
 # again one step at a time. ... .
 
-nkeep = 500
+nkeep = 2000
 OR <- order(abs(OBLIQUITY$N), decreasing=TRUE)[seq(nkeep)]
 OBLIQUITY <- with(OBLIQUITY, list(N = N[OR], sigma=sigma[OR], delta=delta[OR]))
 
@@ -214,61 +275,100 @@ require(palinsol)
 data(BER90)
 par(mfrow=c(1,2))
 
-plot(OBLIQUITY$sigma[seq(100)]/(2*pi), OBLIQUITY$N[seq(100)]/(2*pi), type='n')
-lines(ETERM1$sigma/(2*pi), ETERM1$N/(2*pi), col='red', type='h')
-#lines(ETERM2$sigma/(2*pi), ETERM2$N/(2*pi), col='blue' , type='h')
-#lines(ETERM3$sigma/(2*pi), ETERM3$N/(2*pi), col='gray', type='h')
-#lines(ETERM4$sigma/(2*pi), ETERM4$N/(2*pi), col='green', type='h')
-with(BER90$Table1,  plot(Rate/360/3600 , Amp/60/3600, type='h', col='black'))
+plot(abs(OBLIQUITY$sigma)/(2*pi), OBLIQUITY$N, type='n', ylim=c(-1e-2, 0), xlim=c(0e-5, 4e-5))
+lines(ETERM1$sigma/(2*pi), ETERM1$N, col='red', type='h')
+lines(ETERM2$sigma/(2*pi), ETERM2$N, col='blue' , type='h')
+lines(ETERM3$sigma/(2*pi), ETERM3$N, col='gray', type='h')
+lines(ETERM4$sigma/(2*pi), ETERM4$N, col='green', type='h')
+grid()
+with(BER90$Table1,  plot(Rate/360/3600 , Amp*2*pi/60/60/360, type='h', col='black', ylim=c(-1e-2, 0), xlim=c(0e-5, 4e-5)))
+grid()
+
+# ok this is more or less validated. 
 
 #plot(ETERM1$sigma/(2*pi), C1f, type='h')
 
 # attention at this point we haven't tried to reorganise and chase doublons. 
 # there will be many of those, but one step at a time. 
+# make all frequencies positive for obliquity
+
+
+# this would be the command to group by frequency
+# note you must also make an equivalence for sigma -> abs(sigma) but also correct for te phase accordingly
+# use package dplyr
+# > OBLIQUITY_S <- OBLIQUITY %>% group_by(sigma) %>% summarise (N=sum(N))
 
 
 
+PTERM1 <- list(  N = Dfseconde * outer(EPI$M,EPI$M), 
+                       rate = outer(EPI$g, EPI$g, '-'), 
+                       phase = outer(EPI$beta, EPI$beta, '-'))
 
 
-#### DEVELOPPEMENT FOR PRECESSION
-
-# P0 et ell ont ete repris de sa these, sauf que pour ell il y a peut etre un facteur (1-e_0)3/2
-
-P0 = 17.3919
-ell = 54.9066 
-EPI <- read.table('epi.dat')
-colnames(EPI) <- c('index','g','M','beta')
-EPI$g <- EPI$g/(60*60*360)*2*pi
-EPI$M  <- EPI$M / 1.e8
-EPI$beta <- EPI$beta * 2*pi / 360. 
-
-ng <- length(EPI$g)
+PTERM2 <- list ( N = D1*IOM$N, rate = IOM$sigma, phase = IOM$delta)
+PTERM3 <- list ( N = D2*IOM$N^2, rate = 2*IOM$sigma, phase = 2*IOM$delta)
+PTERM4 <- list ( N = D2ik*outer(IOM$N, IOM$N), 
+                       rate = outer(IOM$sigma, IOM$sigma, '+'), 
+                       phase = outer(IOM$delta, IOM$delta, '+'))
 
 
+PTERM5 <- list ( N = D2ikprime*outer(IOM$N, IOM$N), 
+                       rate = outer(IOM$sigma, IOM$sigma, '-'), 
+                       phase = outer(IOM$delta, IOM$delta, '-'))
 
 
-# precession
+for (i in seq(ng)) {
+  for (k in seq(ng)) {
+      if (k >= i)  {
+        PTERM1$N[i, k] = NA;
+        PTERM1$rate[i, k ] = NA;
+        PTERM1$phase[i, k ] = NA;
+      }
+  }}
+
+for (i in seq(nf)) {
+  for (k in seq(nf)) {
+      if (k >= i)  {
+        PTERM4$N[i, k] = NA;
+        PTERM4$rate[i, k ] = NA;
+        PTERM4$phase[i, k ] = NA;
+        PTERM5$N[i, k] = NA;
+        PTERM5$rate[i, k ] = NA;
+        PTERM5$phase[i, k ] = NA;
+      }
+  }}
+
+
+PTERM1$N <- PTERM1$N[which(!is.na(PTERM1$N))]*1
+PTERM1$rate <- PTERM1$rate[which(!is.na(PTERM1$rate))]
+PTERM1$phase <- PTERM1$phase[which(!is.na(PTERM1$phase))]
+PTERM4$N <- PTERM4$N[which(!is.na(PTERM4$N))]
+PTERM4$rate <- PTERM4$rate[which(!is.na(PTERM4$rate))]
+PTERM4$phase <- PTERM4$phase[which(!is.na(PTERM4$phase))]
+PTERM5$N <- PTERM5$N[which(!is.na(PTERM5$N))]
+PTERM5$rate <- PTERM5$rate[which(!is.na(PTERM5$rate))]
+PTERM5$phase <- PTERM5$phase[which(!is.na(PTERM5$phase))]
+
+PSI <- data.frame (
+        N = c(PTERM1$N, PTERM2$N, PTERM3$N, PTERM4$N, PTERM5$N), 
+        rate = c(PTERM1$rate, PTERM2$rate, PTERM3$rate, PTERM4$rate, PTERM5$rate), 
+        phase = c(PTERM1$phase, PTERM2$phase, PTERM3$phase, PTERM4$phase, PTERM5$phase))
 
 
 
+negatives <- which(PSI$rate < 0);
 
-Dif <- ci * (cote + (ci - 1) * tane)
-
-Diif <- 0.25 * ci * (ci^2 + ci - 1) * 0.125 * ci^2*(ci-1)^2*(tane^2) + .5 * ci^2 * cote^2 
-
-Dikf  <- outer(seq(nf), seq(nf) function(i,j){
-  psibar/(fi[i]+fi[k])*(
-                        0.5*(ci[i]^2 + ci[k]^2 + ci[i] + ci[k] - ci[i]*ci[k] - 2) 
-                      + C2f[i,k]*tane
-                      - 0.5*(ci[i]*(ci[i]-1) + ci[k] * (ci[k] - 1)) * tane^2 + (ci[i] + ci[k]) * cote^2  ) } )
+PSI$N[negatives] = -PSI$N[negatives]
+PSI$rate[negatives] = -PSI$rate[negatives]
+PSI$phase[negatives] = -PSI$phase[negatives]
 
 
+require(dplyr)
+PSI_ORDERED <- PSI %>% group_by(rate) %>% summarise (N=sum(N))
 
-# must define here P0, ell but that's another part of the code. 
+ORDER <- order(abs(PSI_ORDERED$N),  decreasing=TRUE)
 
-Dfseconde = 3 * psibar * P0 / ell * outer(seq(ng), seq(ng), function(i,k) { 1./(EPI$g[i]-EPI$g[k])})
+PSI_ORDERED <- as.data.frame(PSI_ORDERED[ORDER, ])
 
-
-# psi still need to be coded. eq. 64 of his thesis p. 112
-
-
+plot(PSI_ORDERED$rate, abs(PSI_ORDERED$N), type='h')
+plot(BRate, abs(BAmp), type='h')
