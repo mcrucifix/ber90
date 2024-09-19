@@ -931,6 +931,8 @@ c                                                                       p7507880
       ddr(kkk)=dr(i)-dr(k)                                              p7508150
       bf(kk)=0.5d0*prm/sa(kk)*(th*(ww+wwk-2.0d0)+twt*(w+wk))            p7508160
       bf(kkk)=0.5d0*prm/sa(kkk)*(th*(ww-wwk+2.0d0*(wk- w))+twt*(w-wk))  p7508170
+      
+      if (kk.eq.161) write (*,*) "161, ", i, k, sa(kk), ww, wwk, twt
       pf(kk)=prm/sa(kk)*(0.5d0*(ww+wwk+w+wk-w*wk-2.0d0)+bf(kk)*th-0.5d0*p7508180
      *th*th*(w*(w-un)+wk*(wk-un))+twt*twt*(w+wk))                       p7508190
       pf(kkk)=prm/sa(kkk)*(0.5d0*(5.0d0*(w+wk)-(ww+wwk)-w*wk-6.0d0)+bf(kp7508200
