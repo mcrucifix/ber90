@@ -188,11 +188,7 @@ Dfseconde = 3 * psibar * P0 / ell * outer(EPI$g, EPI$g,  function(gi,gk) { 1./(g
 
 # validated
 
-## ATTENTION ; THIS DIFFER BETWEEN THE THESIS AND THE IMPLEMENATION OF BERGER
-
-
-# D1 <- D1f - ci   <- thesis
-D1 <- D1f - cote  #  <- implementation
+D1 <- D1f - cote   # p. 113 of thesis, first equation
 
 D2 <- D2f - (ci - 0.5)*cote^2 - 0.5 * (ci^2 - 0.5)
 D2ik <- D2fik - (outer(ci, ci, '+')-1) * cote^2 - 0.5 *(outer(ci^2, ci^2,'+')-1)
