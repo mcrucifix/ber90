@@ -56,14 +56,14 @@ ecc_2400_filtered <- reconstruct_morlet(M, c(2000,3000))
 R_ecc_2400_filtered <- Re(ecc_2400_filtered)
 R_ecc_100_filtered <- Re(ecc_filtered)
 
-plot(ecc - mean(ecc), col='gray', lwd=3)
+plot(ecc - mean(ecc), col='gray', lwd=3, type='n')
 ssum <- R_ecc_100_filtered + R_ecc_400_filtered + R_ecc_2400_filtered
-lines(ssum, col='violet')
-lines(R_ecc_400_filtered, col='blue', lwd=3)
-lines(R_ecc_2400_filtered, col='red', lwd=2)
+#lines(ssum, col='violet')
+#lines(R_ecc_400_filtered, col='blue', lwd=3)
+#lines(R_ecc_2400_filtered, col='red', lwd=2)
 #lines(R_ecc_2400_filtered*10, lty=2, col='red')
 lines(R_ecc_100_filtered, col='black')
-lines(Mod(ecc_filtered), lty=1, col='black', lwd=2)
+#lines(Mod(ecc_filtered), lty=1, col='black', lwd=2)
 ```
 ```{r}
 plot(cwt_morlet(Mod(ecc_filtered)))
@@ -75,8 +75,15 @@ Jarno's point is that we should compare all these components with the envelope o
 t2 <- seq(-2048,0)*1000
 I65 <- ts(sapply(t2, function(i) Insol(ber90(i))), start=-2048, deltat=1)
 ecc2 <- ts(sapply(t2,ber90)['ecc',], start=-2048, deltat=1)
-MI <- reconstruct_morlet(cwt_morlet(I65), c(12,32))
-plot(Mod(MI)/1000, xlim=c(-1800,-200), col='red')
+MI <- cwt_morlet(I65, k0=13)
+MR <- reconstruct_morlet(MI, c(40,70))
+plot(MI)
+print(attr(MI,"parameters"))
+abline(h=c(12,32))
+#plot(ecc2, xlim=c(-1800,-200), type='n')
+plot((I65-mean(I65))/1000, xlim=c(-1800,-200), col='grey')
+lines(Re(MR)/1000, xlim=c(-1800,-200), col='red', lty=3)
+lines(Mod(MR)/1000, xlim=c(-1800,-200), col='red', lwd=2)
 lines(ecc2)
 ```
 
